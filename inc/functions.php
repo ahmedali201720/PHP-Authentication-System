@@ -58,34 +58,6 @@ function login() {
   $GLOBALS['conn']->close();
 }
 
-function userExists($username,$email) {
-  if ($username != null) {
-    // Function called from register.php
-    $stmt = $GLOBALS['conn']->prepare("select ID from User where Username=? or Email=?");
-    $stmt->bind_param("ss",$username,$email);
-
-  } else {
-    // Function called from verify_account.php
-    $stmt = $GLOBALS['conn']->prepare("select ID from User where Email=?");
-    $stmt->bind_param("s",$email);
-  }
-
-  if($stmt->execute()) {
-    $stmt->store_result();
-
-    if ($stmt->num_rows > 0) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    echo "Error in select query: <i>" . $stmt->error . "</i>";
-  }
-
-  $stmt->close();
-  $GLOBALS['conn']->close();
-}
-
 function checkCurrentPassword($username,$email,$password) {
   $stmt = $GLOBALS['conn']->prepare("select Password from User where Username=? or Email=?");
   $stmt->bind_param("ss",$username,$email);
